@@ -17,7 +17,10 @@
 #include "game.h"
 
 int main() {
+	GameState state = { 0, 0, nullptr, nullptr, 0, 0, P1, false, EASY };
+
 	std::cout << "Queens game initialized." << std::endl;
 
+	clearGame(state);
 	return 0;
 }

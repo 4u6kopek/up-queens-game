@@ -13,4 +13,45 @@
 *
 */
 
-#pragma once
+#ifndef GAME_H
+#define GAME_H
+
+#include <iostream>
+#include <fstream>
+#include <cmath>
+
+const int MAX_CMD_LEN = 256;
+
+enum Player {
+	P1 = 1,
+	P2 = 2
+};
+
+enum Difficulty {
+	EASY = 1,
+	MEDIUM = 2,
+	HARD = 3
+};
+
+struct Move {
+	int x;
+	int y;
+	int player;
+};
+
+struct GameState {
+	int rows;
+	int cols;
+	int** board;
+	Move* history;
+	int historySize;
+	int historyCap;
+	int currentPlayer;
+	bool vsRobot;
+	Difficulty robotDiff;
+};
+
+void initGame(GameState& state, int n, int m, bool vsRobot = false, Difficulty diff = EASY);
+void clearGame(GameState& state);
+
+#endif
