@@ -19,7 +19,18 @@
 int main() {
 	GameState state = { 0, 0, nullptr, nullptr, 0, 0, P1, false, EASY };
 
-	std::cout << "Queens game initialized." << std::endl;
+	std::cout << "Queens game initialized.\n";
+
+	initGame(state, 8, 8);
+
+	state.board[3][3] = P1;
+	std::cout << "Placed a queen at 3, 3\n";
+
+	printBoard(state);
+
+	printFreeMoves(state);
+
+	std::cout << "It works";
 
 	clearGame(state);
 	return 0;

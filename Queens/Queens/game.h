@@ -56,7 +56,10 @@ void initGame(GameState& state, int n, int m, bool vsRobot = false, Difficulty d
 void clearGame(GameState& state);
 bool isValidMove(const GameState& state, int x, int y);
 
-
+// UI
+void printBoard(const GameState& state);
+void printFreeMoves(const GameState& state);
+void printHelp();
 
 // str utils
 bool strEqual(const char* s1, const char* s2);

@@ -72,8 +72,56 @@ bool isValidMove(const GameState& state, int x, int y) {
 	return true;
 }
 
+// UI
+void printBoard(const GameState& state) {
+	if (state.board == nullptr) return;
 
+	std::cout << "  ";
+	for (int j = 0; j < state.cols; ++j) {
+		std::cout << j << " ";
+	}
+	std::cout << "\n";
 
+	for (int i = 0; i < state.rows; ++i) {
+		std::cout << i << " ";
+		for (int j = 0; j < state.cols; ++j) {
+			if (state.board[i][j] == 0) {
+				std::cout << ". ";
+			}
+			else {
+				std::cout << "Q ";
+			}
+		}
+		std::cout << "\n";
+	}
+}
+
+void printFreeMoves(const GameState& state) {
+	if (state.board == nullptr) return;
+
+	std::cout << "Free: ";
+	for (int i = 0; i < state.rows; ++i) {
+		for (int j = 0; j < state.cols; ++j) {
+			if (isValidMove(state, i, j)) {
+				std::cout << "(" << i << "," << j << ") ";
+			}
+		}
+	}
+	std::cout << "\n";
+}
+
+void printHelp() {
+	std::cout << "Commands:\n"
+		<< "new N M [robot] [easy/medium/hard] - Start a new game\n"
+		<< "play x y - Place a queen at coordinates\n"
+		<< "free     - Show all valid moves\n"
+		<< "show     - Display the board\n"
+		<< "turn     - Whose turn is it\n"
+		<< "back     - Undo last move\n"
+		<< "save <file> - Save game state\n"
+		<< "load <file> - Load game state\n"
+		<< "exit     - Exit program\n";
+}
 
 // string u func
 bool strEqual(const char* s1, const char* s2) {
