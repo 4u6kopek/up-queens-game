@@ -45,3 +45,29 @@ void clearGame(GameState& state) {
 	state.history = nullptr;
 	state.historySize = 0;
 }
+
+bool isValidMove(const GameState& state, int x, int y) {
+	if (x < 0 || x >= state.rows || y < 0 || y >= state.cols) {
+		return false;
+	}
+
+	if (state.board[x][y] != 0) {
+		return false;
+	}
+
+	for (int i = 0; i < state.rows; ++i) {
+		for (int j = 0; j < state.cols; ++j) {
+			if (state.board[i][j] != 0) {
+
+				if (i == x || j == y) {
+					return false;
+				}
+
+				if (abs(i - x) == abs(j - y)) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}

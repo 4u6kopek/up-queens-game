@@ -53,5 +53,6 @@ struct GameState {
 
 void initGame(GameState& state, int n, int m, bool vsRobot = false, Difficulty diff = EASY);
 void clearGame(GameState& state);
+bool isValidMove(const GameState& state, int x, int y);
 
 #endif
