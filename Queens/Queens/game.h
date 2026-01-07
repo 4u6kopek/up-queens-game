@@ -51,8 +51,18 @@ struct GameState {
 	Difficulty robotDiff;
 };
 
+// main logic
 void initGame(GameState& state, int n, int m, bool vsRobot = false, Difficulty diff = EASY);
 void clearGame(GameState& state);
 bool isValidMove(const GameState& state, int x, int y);
+
+
+
+// str utils
+bool strEqual(const char* s1, const char* s2);
+int strToInt(const char* s);
+void strCopy(char* dest, const char* src);
+int strLen(const char* s);
+bool isDigit(char c);
 
 #endif

@@ -71,3 +71,45 @@ bool isValidMove(const GameState& state, int x, int y) {
 	}
 	return true;
 }
+
+
+
+
+// string u func
+bool strEqual(const char* s1, const char* s2) {
+	if (!s1 || !s2) return false;
+	while (*s1 && *s2) {
+		if (*s1 != *s2) return false;
+		s1++;
+		s2++;
+	}
+	return *s1 == *s2;
+}
+
+int strToInt(const char* s) {
+	int res = 0;
+	while (*s >= '0' && *s <= '9') {
+		res = res * 10 + (*s - '0');
+		s++;
+	}
+	return res;
+}
+
+void strCopy(char* dest, const char* src) {
+	while (*src) {
+		*dest = *src;
+		dest++;
+		src++;
+	}
+	*dest = '\0';
+}
+
+int strLen(const char* s) {
+	int len = 0;
+	while (s[len]) len++;
+	return len;
+}
+
+bool isDigit(char c) {
+	return c >= '0' && c <= '9';
+}
