@@ -21,17 +21,29 @@ int main() {
 
 	std::cout << "Queens game initialized.\n";
 
-	initGame(state, 8, 8);
+	initGame(state, 5, 5);
+	std::cout << "5x5 board, curr player: P" << state.currentPlayer << "\n\n";
 
-	state.board[3][3] = P1;
-	std::cout << "Placed a queen at 3, 3\n";
+	if (makeMove(state, 0, 0)) {
+		std::cout << "P1 placed queen at (0,0), nexct player: P" << state.currentPlayer << "\n";
+	}
+
+	if (makeMove(state, 1, 2)) {
+		std::cout << "P2 placed queen at (1,2), next player: P" << state.currentPlayer << "\n";
+	}
 
 	printBoard(state);
 
 	printFreeMoves(state);
 
-	std::cout << "It works";
+	std::cout << "\nUndoing last move\n";
+	if (undoMove(state)) {
+		std::cout << "Undo successful. Curr player back to: P" << state.currentPlayer << "\n";
+		printBoard(state);
+	}
 
 	clearGame(state);
+	std::cout << "\nMemory cleared. Test passed.\n";
+
 	return 0;
 }
