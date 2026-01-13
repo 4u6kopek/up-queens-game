@@ -72,6 +72,52 @@ bool isValidMove(const GameState& state, int x, int y) {
 	return true;
 }
 
+void resizeHistory(GameState& state) {
+	int newCap = state.historyCap * 2;
+	Move* newHist = new Move[newCap];
+	for (int i = 0; i < state.historySize; ++i) {
+		newHist[i] = state.history[i];
+	}
+	delete[] state.history;
+	state.history = newHist;
+	state.historyCap = newCap;
+}
+
+bool makeMove(GameState& state, int x, int y) {
+	if (!isValidMove(state, x, y)) {
+		return false;
+	}
+
+	state.board[x][y] = state.currentPlayer;
+
+	if (state.historySize == state.historyCap) {
+		resizeHistory(state);
+	}
+
+	state.history[state.historySize].x = x;
+	state.history[state.historySize].y = y;
+	state.history[state.historySize].player = state.currentPlayer;
+	state.historySize++;
+
+	state.currentPlayer = (state.currentPlayer == P1) ? P2 : P1;
+
+	return true;
+}
+
+bool undoMove(GameState& state) {
+	if (state.historySize == 0) {
+		return false;
+	}
+
+	state.historySize--;
+	Move last = state.history[state.historySize];
+	state.board[last.x][last.y] = 0;
+
+	state.currentPlayer = last.player;
+
+	return true;
+}
+
 // UI
 void printBoard(const GameState& state) {
 	if (state.board == nullptr) return;
