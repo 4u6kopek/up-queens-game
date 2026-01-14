@@ -153,6 +153,13 @@ void printBoard(const GameState& state) {
 	}
 }
 
+void printHistory(const GameState& state) {
+	for (int i = 0; i < state.historySize; ++i) {
+		std::cout << "Move " << i + 1 << ": P" << state.history[i].player
+			<< " at (" << state.history[i].x << "," << state.history[i].y << ")\n";
+	}
+}
+
 void printFreeMoves(const GameState& state) {
 	if (state.board == nullptr) return;
 

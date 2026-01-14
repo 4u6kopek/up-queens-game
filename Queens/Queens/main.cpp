@@ -72,7 +72,7 @@ void handlePlay(GameState& state, const char* cmd) {
 		std::cout << "Player " << (state.currentPlayer == P1 ? P2 : P1) << " moved to (" << x << "," << y << ").\n";
 	}
 	else {
-		std::cout << "Invalid move! Cell is attacked or out of bounds.\n"; // 
+		std::cout << "Invalid move! Cell is attacked or out of bounds.\n"; // ?Doesn't sound good?
 	}
 }
 
@@ -86,6 +86,19 @@ void process(GameState& state, char* cmd, bool& running) {
 	}
 	else if (strEqual(token, "play")) {
 		handlePlay(state, cmd);
+	}
+	else if (strEqual(token, "free")) {
+		printFreeMoves(state);
+	}
+	else if (strEqual(token, "turn")) {
+		std::cout << "Current turn: P" << state.currentPlayer << "\n";
+	}
+	else if (strEqual(token, "back")) {
+		if (undoMove(state)) std::cout << "Last move undone.\n";
+		else std::cout << "No moves to undo.\n";
+	}
+	else if (strEqual(token, "history")) {
+		printHistory(state);
 	}
 	else if (strEqual(token, "show")) {
 		printBoard(state);

@@ -66,6 +66,7 @@ bool hasValidMoves(const GameState& state);
 void printBoard(const GameState& state);
 void printFreeMoves(const GameState& state);
 void printHelp();
+void printHistory(const GameState& state);
 
 // str utils
 bool strEqual(const char* s1, const char* s2);
