@@ -31,17 +31,61 @@ const char* getNextToken(const char* cmd, char* token, int& pos) {
 	return token;
 }
 
-void process(GameState& state, char* cmd, bool& running) {
+void handleNew(GameState& state, const char* cmd) {
 	char token[MAX_CMD_LEN];
 	int pos = 0;
-	if (!getNextToken(cmd, token, pos)) {
+	getNextToken(cmd, token, pos);
+
+	if (!getNextToken(cmd, token, pos)) return;
+	int n = strToInt(token);
+
+	if (!getNextToken(cmd, token, pos)) return;
+	int m = strToInt(token);
+
+	if (n < MIN_DIM || n > MAX_DIM || m < MIN_DIM || m > MAX_DIM) {
+		std::cout << "Invalid dimensions!\n";
 		return;
 	}
 
+	clearGame(state);
+	initGame(state, n, m);
+	std::cout << "Started " << n << "x" << m << " game.\n";
+}
+
+void handlePlay(GameState& state, const char* cmd) {
+	if (state.board == nullptr) {
+		std::cout << "No active game! Use 'new' first.\n";
+		return;
+	}
+
+	char token[MAX_CMD_LEN];
+	int pos = 0;
+	getNextToken(cmd, token, pos);
+
+	if (!getNextToken(cmd, token, pos)) return;
+	int x = strToInt(token);
+
+	if (!getNextToken(cmd, token, pos)) return;
+	int y = strToInt(token);
+
+	if (makeMove(state, x, y)) {
+		std::cout << "Player " << (state.currentPlayer == P1 ? P2 : P1) << " moved to (" << x << "," << y << ").\n";
+	}
+	else {
+		std::cout << "Invalid move! Cell is attacked or out of bounds.\n"; // 
+	}
+}
+
+void process(GameState& state, char* cmd, bool& running) {
+	char token[MAX_CMD_LEN];
+	int pos = 0;
+	if (!getNextToken(cmd, token, pos)) return;
+
 	if (strEqual(token, "new")) {
-		clearGame(state);
-		initGame(state, 5, 5);
-		std::cout << "Started new 5x5 game.\n";
+		handleNew(state, cmd);
+	}
+	else if (strEqual(token, "play")) {
+		handlePlay(state, cmd);
 	}
 	else if (strEqual(token, "show")) {
 		printBoard(state);
@@ -53,7 +97,13 @@ void process(GameState& state, char* cmd, bool& running) {
 		running = false;
 	}
 	else {
-		std::cout << "Unknown command. Type 'help' for info.\n";
+		std::cout << "Unknown command.\n";
+	}
+
+	if (state.board != nullptr && !hasValidMoves(state)) {
+		int winner = (state.currentPlayer == P1) ? P2 : P1;
+		std::cout << "Game Over! Winner: P" << winner << "\n";
+		clearGame(state);
 	}
 }
 

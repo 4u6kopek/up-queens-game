@@ -21,6 +21,8 @@
 #include <cmath>
 
 const int MAX_CMD_LEN = 256;
+const int MIN_DIM = 1;
+const int MAX_DIM = 100;
 
 enum Player {
 	P1 = 1,
