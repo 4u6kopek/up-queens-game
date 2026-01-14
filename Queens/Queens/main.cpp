@@ -16,34 +16,63 @@
 #include <iostream>
 #include "game.h"
 
+const char* getNextToken(const char* cmd, char* token, int& pos) {
+	while (cmd[pos] == ' ') {
+		pos++;
+	}
+	if (cmd[pos] == '\0') {
+		return nullptr;
+	}
+	int tPos = 0;
+	while (cmd[pos] != ' ' && cmd[pos] != '\0') {
+		token[tPos++] = cmd[pos++];
+	}
+	token[tPos] = '\0';
+	return token;
+}
+
+void process(GameState& state, char* cmd, bool& running) {
+	char token[MAX_CMD_LEN];
+	int pos = 0;
+	if (!getNextToken(cmd, token, pos)) {
+		return;
+	}
+
+	if (strEqual(token, "new")) {
+		clearGame(state);
+		initGame(state, 5, 5);
+		std::cout << "Started new 5x5 game.\n";
+	}
+	else if (strEqual(token, "show")) {
+		printBoard(state);
+	}
+	else if (strEqual(token, "help")) {
+		printHelp();
+	}
+	else if (strEqual(token, "exit")) {
+		running = false;
+	}
+	else {
+		std::cout << "Unknown command. Type 'help' for info.\n";
+	}
+}
+
 int main() {
 	GameState state = { 0, 0, nullptr, nullptr, 0, 0, P1, false, EASY };
+	char cmd[MAX_CMD_LEN];
+	bool running = true;
 
-	std::cout << "Queens game initialized.\n";
+	std::cout << "Queens Game\n";
+	std::cout << "Type 'new' to start or 'help' for commands.\n";
 
-	initGame(state, 5, 5);
-	std::cout << "5x5 board, curr player: P" << state.currentPlayer << "\n\n";
-
-	if (makeMove(state, 0, 0)) {
-		std::cout << "P1 placed queen at (0,0), nexct player: P" << state.currentPlayer << "\n";
-	}
-
-	if (makeMove(state, 1, 2)) {
-		std::cout << "P2 placed queen at (1,2), next player: P" << state.currentPlayer << "\n";
-	}
-
-	printBoard(state);
-
-	printFreeMoves(state);
-
-	std::cout << "\nUndoing last move\n";
-	if (undoMove(state)) {
-		std::cout << "Undo successful. Curr player back to: P" << state.currentPlayer << "\n";
-		printBoard(state);
+	while (running) {
+		std::cout << "> ";
+		if (!std::cin.getline(cmd, MAX_CMD_LEN)) {
+			break;
+		}
+		process(state, cmd, running);
 	}
 
 	clearGame(state);
-	std::cout << "\nMemory cleared. Test passed.\n";
-
 	return 0;
 }

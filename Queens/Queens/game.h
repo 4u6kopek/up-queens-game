@@ -58,6 +58,7 @@ bool isValidMove(const GameState& state, int x, int y);
 bool makeMove(GameState& state, int x, int y);
 bool undoMove(GameState& state);
 void resizeHistory(GameState& state);
+bool hasValidMoves(const GameState& state);
 
 // UI
 void printBoard(const GameState& state);

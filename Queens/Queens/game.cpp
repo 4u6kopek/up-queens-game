@@ -118,6 +118,17 @@ bool undoMove(GameState& state) {
 	return true;
 }
 
+bool hasValidMoves(const GameState& state) {
+	for (int i = 0; i < state.rows; ++i) {
+		for (int j = 0; j < state.cols; ++j) {
+			if (isValidMove(state, i, j)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 // UI
 void printBoard(const GameState& state) {
 	if (state.board == nullptr) return;
