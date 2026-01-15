@@ -47,14 +47,31 @@ void handleNew(GameState& state, const char* cmd) {
 		return;
 	}
 
+	bool vsRobot = false;
+	Difficulty diff = EASY;
+
+	if (getNextToken(cmd, token, pos)) {
+		if (strEqual(token, "robot")) {
+			vsRobot = true;
+			if (getNextToken(cmd, token, pos)) {
+				if (strEqual(token, "medium")) {
+					diff = MEDIUM;
+				}
+				else if (strEqual(token, "hard")) {
+					diff = HARD;
+				}
+			}
+		}
+	}
+
 	clearGame(state);
-	initGame(state, n, m);
-	std::cout << "Started " << n << "x" << m << " game.\n";
+	initGame(state, n, m, vsRobot, diff);
+	std::cout << "Started " << n << "x" << m << (vsRobot ? " vs Robot\n" : " PvP\n");
 }
 
 void handlePlay(GameState& state, const char* cmd) {
 	if (state.board == nullptr) {
-		std::cout << "No active game! Use 'new' first.\n";
+		std::cout << "No active game!\n";
 		return;
 	}
 
@@ -69,10 +86,13 @@ void handlePlay(GameState& state, const char* cmd) {
 	int y = strToInt(token);
 
 	if (makeMove(state, x, y)) {
-		std::cout << "Player " << (state.currentPlayer == P1 ? P2 : P1) << " moved to (" << x << "," << y << ").\n";
+		if (state.vsRobot && hasValidMoves(state)) {
+			makeRobotMove(state);
+			std::cout << "Robot made its move.\n";
+		}
 	}
 	else {
-		std::cout << "Invalid move! Cell is attacked or out of bounds.\n"; // ?Doesn't sound good?
+		std::cout << "Invalid move!\n";
 	}
 }
 
