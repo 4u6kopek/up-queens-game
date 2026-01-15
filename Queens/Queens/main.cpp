@@ -106,6 +106,22 @@ void process(GameState& state, char* cmd, bool& running) {
 	else if (strEqual(token, "help")) {
 		printHelp();
 	}
+	else if (strEqual(token, "save") || strEqual(token, "load")) {
+		char file[MAX_CMD_LEN];
+		if (getNextToken(cmd, file, pos)) {
+			if (token[0] == 's') {
+				if (saveGame(state, file)) std::cout << "Game saved to " << file << "\n";
+				else std::cout << "Failed to save game.\n";
+			}
+			else {
+				if (loadGame(state, file)) std::cout << "Game loaded from " << file << "\n";
+				else std::cout << "Failed to load game.\n";
+			}
+		}
+		else {
+			std::cout << "Usage: save/load <filename>\n";
+		}
+	}
 	else if (strEqual(token, "exit")) {
 		running = false;
 	}

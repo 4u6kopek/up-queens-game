@@ -62,6 +62,10 @@ bool undoMove(GameState& state);
 void resizeHistory(GameState& state);
 bool hasValidMoves(const GameState& state);
 
+// save and load
+bool saveGame(const GameState& state, const char* filename);
+bool loadGame(GameState& state, const char* filename);
+
 // UI
 void printBoard(const GameState& state);
 void printFreeMoves(const GameState& state);

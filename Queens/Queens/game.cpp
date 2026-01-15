@@ -129,6 +129,58 @@ bool hasValidMoves(const GameState& state) {
 	return false;
 }
 
+bool saveGame(const GameState& state, const char* filename) {
+	std::ofstream ofs(filename, std::ios::binary);
+	if (!ofs) {
+		return false;
+	}
+
+	ofs.write((char*)&state.rows, sizeof(int));
+	ofs.write((char*)&state.cols, sizeof(int));
+	ofs.write((char*)&state.currentPlayer, sizeof(int));
+	ofs.write((char*)&state.vsRobot, sizeof(bool));
+	ofs.write((char*)&state.robotDiff, sizeof(Difficulty));
+
+	for (int i = 0; i < state.rows; ++i) {
+		ofs.write((char*)state.board[i], sizeof(int) * state.cols);
+	}
+
+	ofs.write((char*)&state.historySize, sizeof(int));
+	ofs.write((char*)state.history, sizeof(Move) * state.historySize);
+
+	ofs.close();
+	return true;
+}
+
+bool loadGame(GameState& state, const char* filename) {
+	std::ifstream ifs(filename, std::ios::binary);
+	if (!ifs) {
+		return false;
+	}
+
+	clearGame(state);
+
+	ifs.read((char*)&state.rows, sizeof(int));
+	ifs.read((char*)&state.cols, sizeof(int));
+	ifs.read((char*)&state.currentPlayer, sizeof(int));
+	ifs.read((char*)&state.vsRobot, sizeof(bool));
+	ifs.read((char*)&state.robotDiff, sizeof(Difficulty));
+
+	state.board = new int* [state.rows];
+	for (int i = 0; i < state.rows; ++i) {
+		state.board[i] = new int[state.cols];
+		ifs.read((char*)state.board[i], sizeof(int) * state.cols);
+	}
+
+	ifs.read((char*)&state.historySize, sizeof(int));
+	state.historyCap = state.historySize + 10;
+	state.history = new Move[state.historyCap];
+	ifs.read((char*)state.history, sizeof(Move) * state.historySize);
+
+	ifs.close();
+	return true;
+}
+
 // UI
 void printBoard(const GameState& state) {
 	if (state.board == nullptr) return;
