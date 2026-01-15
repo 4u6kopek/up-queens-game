@@ -62,6 +62,10 @@ bool undoMove(GameState& state);
 void resizeHistory(GameState& state);
 bool hasValidMoves(const GameState& state);
 
+// robot logic
+void makeRobotMove(GameState& state);
+int countFreeCells(const GameState& state);
+
 // save and load
 bool saveGame(const GameState& state, const char* filename);
 bool loadGame(GameState& state, const char* filename);

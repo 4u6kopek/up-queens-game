@@ -129,6 +129,71 @@ bool hasValidMoves(const GameState& state) {
 	return false;
 }
 
+int countFreeCells(const GameState& state) {
+	int count = 0;
+	for (int i = 0; i < state.rows; ++i) {
+		for (int j = 0; j < state.cols; ++j) {
+			if (isValidMove(state, i, j)) {
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+void makeRobotMove(GameState& state) {
+	int bestX = -1, bestY = -1;
+
+	if (state.robotDiff == EASY) {
+		for (int i = 0; i < state.rows; ++i) {
+			for (int j = 0; j < state.cols; ++j) {
+				if (isValidMove(state, i, j)) {
+					makeMove(state, i, j);
+					return;
+				}
+			}
+		}
+	}
+	else if (state.robotDiff == MEDIUM) {
+		int minEdgeDist = 1000000;
+		for (int i = 0; i < state.rows; ++i) {
+			for (int j = 0; j < state.cols; ++j) {
+				if (isValidMove(state, i, j)) {
+					int d = i < state.rows - 1 - i ? i : state.rows - 1 - i;
+					int d2 = j < state.cols - 1 - j ? j : state.cols - 1 - j;
+					int currentDist = d < d2 ? d : d2;
+					if (currentDist < minEdgeDist) {
+						minEdgeDist = currentDist;
+						bestX = i;
+						bestY = j;
+					}
+				}
+			}
+		}
+	}
+	else {
+		int maxNextMoves = -1;
+		for (int i = 0; i < state.rows; ++i) {
+			for (int j = 0; j < state.cols; ++j) {
+				if (isValidMove(state, i, j)) {
+					state.board[i][j] = state.currentPlayer;
+					int free = countFreeCells(state);
+					state.board[i][j] = 0;
+					if (free > maxNextMoves) {
+						maxNextMoves = free;
+						bestX = i;
+						bestY = j;
+					}
+				}
+			}
+		}
+	}
+
+	if (bestX != -1) {
+		makeMove(state, bestX, bestY);
+	}
+}
+
 bool saveGame(const GameState& state, const char* filename) {
 	std::ofstream ofs(filename, std::ios::binary);
 	if (!ofs) {
